@@ -1,0 +1,28 @@
+# Jekyll
+_site/
+.jekyll-cache/
+.jekyll-metadata
+.sass-cache/
+
+# Ruby
+.bundle/
+vendor/
+Gemfile.lock
+.ruby-version
+
+# Editors / OS
+.DS_Store
+.vscode/
+.idea/
+
+# Antigravity / agent caches
+.antigravity/
+.agy/
+.gemini/
+
+# Claude Code local state
+.claude/
+graphify-out/cache/
+graphify-out/*
+!graphify-out/graph.json
+!graphify-out/GRAPH_REPORT.md

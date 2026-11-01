@@ -1,0 +1,15 @@
+{% comment %}
+  GitHub Pages cannot run Mermaid at build time, so render client-side.
+  Kramdown emits ```mermaid fences as <pre><code class="language-mermaid">; convert them to <div class="mermaid">.
+{% endcomment %}
+<script type="module">
+  import mermaid from "https://cdn.jsdelivr.net/npm/mermaid@11.4.1/dist/mermaid.esm.min.mjs";
+  document.querySelectorAll("pre > code.language-mermaid").forEach((code) => {
+    const div = document.createElement("div");
+    div.className = "mermaid";
+    div.textContent = code.textContent;
+    code.parentElement.replaceWith(div);
+  });
+  mermaid.initialize({ startOnLoad: false, theme: "neutral" });
+  await mermaid.run({ querySelector: ".mermaid" });
+</script>

@@ -1,0 +1,30 @@
+title: Akshit Harsola
+description: Machine Learning, Robotics and Computer Vision engineer.
+url: "https://akshitharsola.github.io"
+baseurl: ""
+
+author:
+  name: Akshit Harsola
+  github: akshitharsola
+  linkedin: "https://www.linkedin.com/in/akshit-harsola/"
+
+markdown: kramdown
+highlighter: rouge
+
+collections:
+  projects:
+    output: true
+    permalink: /projects/:name/
+
+defaults:
+  - scope: { path: "", type: projects }
+    values: { layout: project }
+
+exclude:
+  - docs/
+  - Gemfile
+  - Gemfile.lock
+  - README.md
+  - AGENTS.md
+  - GEMINI.md
+  - vendor/

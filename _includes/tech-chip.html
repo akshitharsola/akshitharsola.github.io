@@ -1,0 +1,10 @@
+{%- comment -%} Usage: {% include tech-chip.html name="Python" %}. Logos are Simple Icons, drawn as a CSS mask so they follow the text colour in light and dark mode. {%- endcomment -%}
+{%- assign n = include.name | downcase -%}
+{%- case n -%}
+  {%- when "c++" -%}{%- assign slug = "cplusplus" -%}
+  {%- when "power bi" -%}{%- assign slug = "powerbi" -%}
+  {%- when "ros 2 jazzy", "ros 2" -%}{%- assign slug = "ros" -%}
+  {%- when "python", "opencv", "pytorch", "docker", "swift", "kotlin", "latex" -%}{%- assign slug = n -%}
+  {%- else -%}{%- assign slug = "" -%}
+{%- endcase -%}
+<span class="chip">{% if slug != "" %}<i class="chip-logo" style="--logo:url('https://cdn.jsdelivr.net/npm/simple-icons@11.14.0/icons/{{ slug }}.svg')" aria-hidden="true"></i>{% endif %}{{ include.name }}</span>

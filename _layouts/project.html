@@ -1,0 +1,10 @@
+---
+layout: default
+---
+<article class="project">
+  <p class="eyebrow">{{ page.domain }}</p>
+  <h1>{{ page.title }}</h1>
+  <p class="lede">{{ page.summary }}</p>
+  <ul class="stack">{% for t in page.stack %}<li>{% include tech-chip.html name=t %}</li>{% endfor %}</ul>
+  {{ content }}
+</article>
