@@ -26,7 +26,8 @@ title: Home
 <section id="projects" class="projects-section">
   <h2 class="section-heading">Projects</h2>
   <div class="project-grid">
-    {% for p in site.projects %}
+    {% assign sorted_projects = site.projects | sort: "order" %}
+    {% for p in sorted_projects %}
     <article class="project-card">
       <div class="card-meta">
         <span class="eyebrow">{{ p.domain }}</span>

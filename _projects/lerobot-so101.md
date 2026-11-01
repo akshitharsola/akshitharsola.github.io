@@ -1,6 +1,7 @@
 ---
 title: "Learning to Pick: Imitation-Learning Strawberry Harvesting"
 domain: Robotics
+order: 1
 summary: "MSc major project: ACT, Diffusion Policy and SmolVLA compared on a low-cost SO-101 arm; the final SmolVLA model picked 8 of 10 trials."
 stack: [PyTorch, Python, ROS 2]
 ---

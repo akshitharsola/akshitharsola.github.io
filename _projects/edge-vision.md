@@ -1,6 +1,7 @@
 ---
 title: Classical Parking Occupancy Detection
 domain: Computer Vision
+order: 2
 summary: "Classical OpenCV pipeline detecting 95.1% of parking spots and classifying occupancy (74.2% F1) at ~120 ms per image, with no training data."
 stack: [Python, OpenCV]
 ---

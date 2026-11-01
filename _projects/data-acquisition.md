@@ -1,6 +1,7 @@
 ---
 title: "Freelance: Sensor Data Acquisition and Client Apps"
 domain: Systems Integration
+order: 3
 summary: "Freelance: found why a client's Power BI request had no data, built the acquisition layer, API and live dashboards, plus LaTeX and mobile work."
 stack: [C++, Python, Power BI, Kotlin, Swift, LaTeX]
 ---
