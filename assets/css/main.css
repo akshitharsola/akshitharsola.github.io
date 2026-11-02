@@ -361,7 +361,7 @@ img {
   background: var(--bg);
   color: var(--fg);
   /* Fail-safe: hide even if intro.js never runs. intro.js removes it sooner. */
-  animation: loader-failsafe .3s ease 1.8s forwards;
+  animation: loader-failsafe .3s ease 12s forwards;
 }
 .loader.is-done {
   opacity: 0;
@@ -410,6 +410,37 @@ img {
 }
 .loader.is-ready .loader-status { color: var(--fg); }
 .loader.is-ready .loader-dot { background: var(--accent); }
+.loader-type {
+  margin: 0;
+  padding: 0 12px;
+  min-height: 2.8em;
+  max-width: min(92vw, 640px);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  text-align: center;
+  font: 500 clamp(0.85rem, 2.5vw, 1.05rem)/1.4 var(--mono);
+  color: var(--accent);
+  letter-spacing: 0.02em;
+  word-break: break-word;
+}
+.loader-type::after {
+  content: "";
+  display: inline-block;
+  width: 2px;
+  height: 1.15em;
+  background-color: var(--accent);
+  margin-left: 4px;
+  vertical-align: -0.15em;
+  animation: caret-blink 0.8s steps(2, start) infinite;
+}
+.loader:not(.is-ready) .loader-type::after,
+.loader.is-done .loader-type::after {
+  display: none;
+}
+@keyframes caret-blink {
+  to { visibility: hidden; }
+}
 .loader-skip,
 .hero-skip {
   font: 600 .75rem/1 var(--mono);
@@ -777,6 +808,10 @@ img {
 
 @media (prefers-reduced-motion: reduce) {
   .loader-active .loader { display: none; }
+  .loader-type::after {
+    animation: none;
+    display: none;
+  }
   .reveal-ready .reveal {
     opacity: 1;
     transform: none;

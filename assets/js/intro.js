@@ -36,6 +36,11 @@
 
   function playVideo() {
     if (!video || reduceMotion) return;
+    if (video.error || video.networkState === 3 /* NETWORK_NO_SOURCE */) {
+      try { video.pause(); } catch (err) {}
+      hideSkipIntro();
+      return;
+    }
     video.muted = true;
     video.loop = false;
     if (skipIntro) skipIntro.hidden = false;
@@ -43,12 +48,16 @@
     try {
       p = video.play();
     } catch (e) {
+      try { video.pause(); } catch (err) {}
       hideSkipIntro();
       return;
     }
     if (p && typeof p.catch === "function") {
       /* Autoplay refused or no playable source: the poster stays as the hero. */
-      p.catch(function () { hideSkipIntro(); });
+      p.catch(function () {
+        try { video.pause(); } catch (err) {}
+        hideSkipIntro();
+      });
     }
   }
 
@@ -61,7 +70,7 @@
   }
   if (skipIntro) skipIntro.addEventListener("click", holdFinalFrame);
 
-  /* ---------- Loader ---------- */
+  /* ---------- Loader & Typewriter ---------- */
   var loader = document.getElementById("loader");
   var timers = [];
   var loaderFinished = false;
@@ -69,7 +78,9 @@
   function finishLoader() {
     if (loaderFinished) return;
     loaderFinished = true;
-    timers.forEach(clearTimeout);
+    while (timers.length) {
+      clearTimeout(timers.pop());
+    }
     var hadFocus = loader && loader.contains(document.activeElement);
     doc.classList.remove("loader-active");
     if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
@@ -82,15 +93,152 @@
 
   if (loader && doc.classList.contains("loader-active") && !reduceMotion) {
     try { window.sessionStorage.setItem("intro-seen", "1"); } catch (e) {}
+
+    // While loader is active, request preloading video
+    if (video) {
+      video.preload = "auto";
+      if (video.networkState === 0 /* NETWORK_EMPTY */) {
+        try { video.load(); } catch (e) {}
+      }
+    }
+
     var statusText = document.getElementById("loader-status-text");
+    var loaderType = document.getElementById("loader-type");
     var skipLoader = document.getElementById("loader-skip");
     if (skipLoader) skipLoader.addEventListener("click", finishLoader);
-    timers.push(setTimeout(function () {
+
+    var videoReady = false;
+    var armDone = false;
+    var capHit = false;
+    var typingStarted = false;
+
+    var typingLines = [
+      "Machine Learning · Robotics · Computer Vision",
+      "Robot Learning | ROS 2 | LeRobot",
+      "3x Published Researcher",
+      "Seeking graduate roles in Ireland and the EU"
+    ];
+
+    function startTyping() {
+      if (typingStarted || loaderFinished) return;
+      typingStarted = true;
+
       if (statusText) statusText.textContent = "READY";
       loader.classList.add("is-ready");
-    }, 1000));
-    timers.push(setTimeout(function () { loader.classList.add("is-done"); }, 1200));
-    timers.push(setTimeout(finishLoader, 1500));
+
+      var lineIdx = 0;
+
+      function typeCurrentLine() {
+        if (loaderFinished) return;
+        if (lineIdx >= typingLines.length) {
+          loader.classList.add("is-done");
+          timers.push(setTimeout(finishLoader, 300));
+          return;
+        }
+
+        var text = typingLines[lineIdx];
+        var charIdx = 0;
+        // ~550ms typing duration per line
+        var charDelay = Math.max(12, Math.round(550 / text.length));
+
+        function typeChar() {
+          if (loaderFinished) return;
+          charIdx++;
+          if (loaderType) loaderType.textContent = text.slice(0, charIdx);
+          if (charIdx < text.length) {
+            timers.push(setTimeout(typeChar, charDelay));
+          } else {
+            // Line typed completely. Pause 350ms.
+            if (lineIdx === typingLines.length - 1) {
+              // Final line: pause 350ms then fade out loader
+              timers.push(setTimeout(function () {
+                if (loaderFinished) return;
+                loader.classList.add("is-done");
+                timers.push(setTimeout(finishLoader, 300));
+              }, 350));
+            } else {
+              // Pause 350ms then erase
+              timers.push(setTimeout(function () {
+                if (loaderFinished) return;
+                eraseCurrentLine(text);
+              }, 350));
+            }
+          }
+        }
+        typeChar();
+      }
+
+      function eraseCurrentLine(text) {
+        if (loaderFinished) return;
+        var curLen = text.length;
+        // Erase in ~120ms total
+        var stepDelay = 15;
+        var charsPerStep = Math.max(1, Math.ceil(text.length / (120 / stepDelay)));
+
+        function eraseStep() {
+          if (loaderFinished) return;
+          curLen = Math.max(0, curLen - charsPerStep);
+          if (loaderType) loaderType.textContent = text.slice(0, curLen);
+          if (curLen > 0) {
+            timers.push(setTimeout(eraseStep, stepDelay));
+          } else {
+            lineIdx++;
+            timers.push(setTimeout(typeCurrentLine, 40));
+          }
+        }
+        eraseStep();
+      }
+
+      typeCurrentLine();
+    }
+
+    function checkGate() {
+      if (typingStarted || loaderFinished) return;
+      if ((armDone && videoReady) || capHit) {
+        startTyping();
+      }
+    }
+
+    // Arm drawing completes in ~1050ms
+    timers.push(setTimeout(function () {
+      armDone = true;
+      checkGate();
+    }, 1050));
+
+    // Hard cap at 4000ms from start
+    timers.push(setTimeout(function () {
+      capHit = true;
+      checkGate();
+    }, 4000));
+
+    // Video readiness check
+    if (video) {
+      if (video.readyState >= 4) {
+        videoReady = true;
+        checkGate();
+      } else {
+        var onCanPlayThrough = function () {
+          videoReady = true;
+          video.removeEventListener("canplaythrough", onCanPlayThrough);
+          checkGate();
+        };
+        video.addEventListener("canplaythrough", onCanPlayThrough);
+
+        // Also if last source errors or video fails, mark videoReady so we don't stall for 4s
+        var videoSources = video.querySelectorAll("source");
+        var onVideoErr = function () {
+          videoReady = true;
+          checkGate();
+        };
+        if (videoSources.length) {
+          videoSources[videoSources.length - 1].addEventListener("error", onVideoErr, { once: true });
+        }
+        video.addEventListener("error", onVideoErr, { once: true });
+      }
+    } else {
+      videoReady = true;
+      checkGate();
+    }
   } else {
     doc.classList.remove("loader-active");
     if (loader && loader.parentNode) loader.parentNode.removeChild(loader);
