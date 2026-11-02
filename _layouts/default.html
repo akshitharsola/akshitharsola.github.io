@@ -6,8 +6,22 @@
   <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
   <meta name="description" content="{{ page.summary | default: site.description }}">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
+  {%- if page.intro %}
+  <meta name="theme-color" content="#0b0d10">
+  <script>
+    /* Decide before first paint whether the intro loader runs, so it never flashes in late. */
+    (function () {
+      try { if (window.matchMedia("(prefers-reduced-motion: reduce)").matches) return; } catch (e) {}
+      var seen = null;
+      try { seen = window.sessionStorage.getItem("intro-seen"); } catch (e) {}
+      if (!seen) document.documentElement.classList.add("loader-active");
+    })();
+  </script>
+  <script src="{{ '/assets/js/intro.js' | relative_url }}" defer></script>
+  {%- endif %}
 </head>
-<body>
+<body{% if page.body_class %} class="{{ page.body_class }}"{% endif %}>
+  {%- if page.intro %}{% include intro-loader.html %}{% endif %}
   <header class="site-header">
     <a class="brand" href="{{ '/' | relative_url }}">{{ site.author.name }}</a>
     <nav>

@@ -4,6 +4,8 @@ domain: Robotics
 order: 1
 summary: "MSc major project: ACT, Diffusion Policy and SmolVLA compared on a low-cost SO-101 arm; the final SmolVLA model picked 8 of 10 trials."
 stack: [PyTorch, Python, ROS 2]
+headline: "8/10"
+headline_label: "pick-and-place trials (SmolVLA, pilot scale)"
 ---
 EE5111 Intelligent Robotics major project, University of Galway (supervisor: Dr. Brian Deegan). [Code and thesis](https://github.com/akshitharsola/learning-to-pick-lerobot-so101)
 

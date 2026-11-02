@@ -1,0 +1,19 @@
+{%- comment -%}
+  Intro loader for the home page. Hidden by CSS unless the inline head script added
+  .loader-active (no JS or reduced motion means no loader). A CSS fallback animation
+  hides it even if intro.js never runs; intro.js removes it from the DOM when done.
+{%- endcomment -%}
+<div class="loader" id="loader" role="region" aria-label="Intro">
+  <svg class="loader-arm" viewBox="0 0 200 200" width="160" height="160" aria-hidden="true" focusable="false">
+    <path class="draw d1" pathLength="1" d="M66 182 H134 V166 H66 Z"/>
+    <path class="draw d2" pathLength="1" d="M86 166 V128 M114 166 V128"/>
+    <circle class="draw joint d3" pathLength="1" cx="100" cy="118" r="11"/>
+    <path class="draw d4" pathLength="1" d="M93 110 L64 70"/>
+    <circle class="draw joint d5" pathLength="1" cx="60" cy="62" r="9"/>
+    <path class="draw d6" pathLength="1" d="M69 60 L124 50"/>
+    <circle class="draw joint d7" pathLength="1" cx="131" cy="49" r="6"/>
+    <path class="draw d8" pathLength="1" d="M131 55 V70 M122 70 H140 M122 70 V86 M140 70 V86"/>
+  </svg>
+  <p class="loader-status"><span class="loader-dot" aria-hidden="true"></span><span id="loader-status-text">INITIALISING</span></p>
+  <button type="button" class="loader-skip" id="loader-skip">Skip</button>
+</div>

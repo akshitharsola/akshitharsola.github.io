@@ -4,6 +4,8 @@ domain: Computer Vision
 order: 2
 summary: "Classical OpenCV pipeline detecting 95.1% of parking spots and classifying occupancy (74.2% F1) at ~120 ms per image, with no training data."
 stack: [Python, OpenCV]
+headline: "95.1%"
+headline_label: "parking spots detected (328 of 345)"
 ---
 EE551 Embedded Image Processing course project, University of Galway.
 [Code and report](https://github.com/akshitharsola/Classical-Parking-Spot-Detection-and-Occupancy-Classification-Using-Image-Processing)

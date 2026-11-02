@@ -1,34 +1,65 @@
 ---
 layout: default
 title: Home
+body_class: home
+intro: true
 ---
-<section class="dashboard-hero">
-  <h1 class="hero-title">{{ site.author.name }}</h1>
-  <p class="hero-focus">Machine Learning · Robotics · Computer Vision</p>
-  <p class="hero-status">Seeking graduate roles in Ireland and the EU</p>
-
-  <div class="hero-links">
-    <a href="https://github.com/{{ site.author.github }}" class="action-link" target="_blank" rel="noopener">GitHub</a>
-    <a href="{{ site.author.linkedin }}" class="action-link" target="_blank" rel="noopener">LinkedIn</a>
+{%- assign cv_url = '/assets/cv-akshit-harsola.pdf' | relative_url -%}
+{%- assign github_url = 'https://github.com/' | append: site.author.github -%}
+<section class="hero" aria-labelledby="hero-title">
+  <div class="hero-media">
+    <video class="hero-video" id="hero-video" muted playsinline preload="metadata"
+           poster="{{ '/assets/media/hero-poster.jpg' | relative_url }}"
+           width="1280" height="720" aria-hidden="true">
+      <source src="{{ '/assets/media/hero-480.mp4' | relative_url }}" type="video/mp4" media="(max-width: 700px)">
+      <source src="{{ '/assets/media/hero-720.webm' | relative_url }}" type="video/webm">
+      <source src="{{ '/assets/media/hero-720.mp4' | relative_url }}" type="video/mp4">
+    </video>
+    <div class="hero-scrim" aria-hidden="true"></div>
+    <p class="hero-caption">Illustrative intro, AI-generated</p>
+    <button type="button" class="hero-skip" id="hero-skip" hidden>Skip intro</button>
   </div>
 
-  <div class="core-stack">
-    <span class="core-stack-label">Core Stack:</span>
-    <ul class="stack">
-      <li>{% include tech-chip.html name="ROS 2 Jazzy" %}</li>
-      <li>{% include tech-chip.html name="C++" %}</li>
-      <li>{% include tech-chip.html name="PyTorch" %}</li>
-      <li>{% include tech-chip.html name="Docker" %}</li>
-    </ul>
+  <div class="hero-text">
+    <h1 class="hero-name" id="hero-title" tabindex="-1">{{ site.author.name }}</h1>
+    <p class="hero-focus-line">Machine Learning · Robotics · Computer Vision</p>
+    <p class="hero-seeking">Seeking graduate roles in Ireland and the EU</p>
+    <div class="btn-row">
+      <a class="btn" id="hero-github" href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+      <a class="btn" id="hero-linkedin" href="{{ site.author.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+      <a class="btn" id="hero-email" href="mailto:harsolaakshit@gmail.com">Email</a>
+      <a class="btn btn-primary" id="hero-cv" href="{{ cv_url }}">Download CV</a>
+    </div>
   </div>
 </section>
 
-<section id="projects" class="projects-section">
-  <h2 class="section-heading">Projects</h2>
+<section class="proof wrap" aria-label="Key results">
+  <ul class="proof-list">
+    <li class="proof-item reveal">
+      <span class="proof-num">8/10</span>
+      <span class="proof-label">pick-and-place trials (SmolVLA, pilot scale)</span>
+    </li>
+    <li class="proof-item reveal">
+      <span class="proof-num">95.1%</span>
+      <span class="proof-label">parking spots detected (328 of 345)</span>
+    </li>
+    <li class="proof-item reveal">
+      <span class="proof-num">~120 ms</span>
+      <span class="proof-label">per image, classical CV, no GPU</span>
+    </li>
+  </ul>
+</section>
+
+<section id="projects" class="projects-section wrap">
+  <h2 class="section-heading"><span class="section-kicker" aria-hidden="true">01</span>Projects</h2>
   <div class="project-grid">
     {% assign sorted_projects = site.projects | sort: "order" %}
     {% for p in sorted_projects %}
-    <article class="project-card">
+    <article class="project-card reveal">
+      {%- if p.headline %}
+      <p class="card-headline{% if p.headline.size > 8 %} is-phrase{% endif %}">{{ p.headline }}</p>
+      {%- if p.headline_label %}<p class="card-headline-label">{{ p.headline_label }}</p>{% endif %}
+      {%- endif %}
       <div class="card-meta">
         <span class="eyebrow">{{ p.domain }}</span>
       </div>
@@ -46,6 +77,33 @@ title: Home
   </div>
 </section>
 
+<section id="about" class="about wrap" aria-labelledby="about-title">
+  <h2 class="section-heading" id="about-title"><span class="section-kicker" aria-hidden="true">02</span>About and contact</h2>
+  <div class="about-body">
+    <img class="portrait" src="{{ '/assets/media/portrait.jpg' | relative_url }}" alt="Akshit Harsola" width="160" height="160" loading="lazy" decoding="async">
+    <div class="about-text">
+      <p class="about-line">MSc Intelligent Robotics, University of Galway (2025 to 2026)</p>
+      <p class="about-line about-place">Galway, Ireland</p>
+      <div class="core-stack">
+        <span class="core-stack-label">Core Stack</span>
+        <ul class="stack">
+          <li>{% include tech-chip.html name="ROS 2 Jazzy" %}</li>
+          <li>{% include tech-chip.html name="C++" %}</li>
+          <li>{% include tech-chip.html name="PyTorch" %}</li>
+          <li>{% include tech-chip.html name="Docker" %}</li>
+        </ul>
+      </div>
+      <div class="btn-row">
+        <a class="btn" id="about-github" href="{{ github_url }}" target="_blank" rel="noopener">GitHub</a>
+        <a class="btn" id="about-linkedin" href="{{ site.author.linkedin }}" target="_blank" rel="noopener">LinkedIn</a>
+        <a class="btn" id="about-email" href="mailto:harsolaakshit@gmail.com">Email</a>
+        <a class="btn btn-primary" id="about-cv" href="{{ cv_url }}">Download CV</a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<div class="practice wrap">
 <section class="engineering-practice">
   <h2 class="section-heading">Engineering Practice & CI</h2>
   <p>The repository's GitHub Actions workflow runs on every push and pull request to <code>main</code> via GitHub Actions (<code>.github/workflows/ci.yml</code>). It runs two jobs against this repository:</p>
@@ -105,3 +163,4 @@ jobs:
       - name: Build site with Jekyll
         run: bundle exec jekyll build
 {% endhighlight %}
+</div>
