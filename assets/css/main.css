@@ -506,6 +506,9 @@ img {
 .hero-skip[hidden] {
   display: none;
 }
+.hero-toggle {
+  display: none;
+}
 .hero-text {
   position: relative;
   z-index: 2;
@@ -609,6 +612,15 @@ img {
     right: max(24px, 4vw);
     bottom: 20px;
   }
+  /* Text-over-video peek: only where the text overlaps the frame (desktop). */
+  .hero-toggle:not([hidden]) {
+    display: block;
+    right: calc(max(24px, 4vw) + 120px);
+  }
+  .hero-media { cursor: pointer; }
+  .hero-text, .hero-scrim { transition: opacity .35s ease, visibility .35s; }
+  .hero.text-hidden .hero-text,
+  .hero.text-hidden .hero-scrim { opacity: 0; visibility: hidden; }
 }
 
 /* ---------- Proof strip ---------- */

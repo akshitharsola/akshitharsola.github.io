@@ -18,9 +18,10 @@ intro: true
     <div class="hero-scrim" aria-hidden="true"></div>
     <p class="hero-caption">Illustrative intro, AI-generated</p>
     <button type="button" class="hero-skip" id="hero-skip" hidden>Skip intro</button>
+    <button type="button" class="hero-skip hero-toggle" id="hero-toggle" aria-controls="hero-text" aria-pressed="false" hidden>Hide text</button>
   </div>
 
-  <div class="hero-text">
+  <div class="hero-text" id="hero-text">
     <h1 class="hero-name" id="hero-title" tabindex="-1">{{ site.author.name }}</h1>
     <p class="hero-focus-line">Machine Learning · Robotics · Computer Vision</p>
     <p class="hero-seeking">Seeking graduate roles in Ireland and the EU</p>

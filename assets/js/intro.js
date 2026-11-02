@@ -70,6 +70,32 @@
   }
   if (skipIntro) skipIntro.addEventListener("click", holdFinalFrame);
 
+  /* Hide/show the hero text so the video can be seen unobstructed (desktop only;
+     on narrow screens the text sits below the frame). Click the video or the button. */
+  var hero = document.querySelector(".hero");
+  var heroToggle = document.getElementById("hero-toggle");
+  var heroMedia = document.querySelector(".hero-media");
+  function setTextHidden(hide) {
+    if (!hero) return;
+    hero.classList.toggle("text-hidden", hide);
+    if (heroToggle) {
+      heroToggle.textContent = hide ? "Show text" : "Hide text";
+      heroToggle.setAttribute("aria-pressed", hide ? "true" : "false");
+    }
+  }
+  if (hero && heroToggle && heroMedia) {
+    heroToggle.hidden = false;
+    heroToggle.addEventListener("click", function () {
+      setTextHidden(!hero.classList.contains("text-hidden"));
+    });
+    heroMedia.addEventListener("click", function (e) {
+      if (e.target.closest("button, a")) return;
+      setTextHidden(!hero.classList.contains("text-hidden"));
+    });
+    if (video) video.addEventListener("ended", function () { setTextHidden(false); });
+    if (skipIntro) skipIntro.addEventListener("click", function () { setTextHidden(false); });
+  }
+
   /* ---------- Loader & Typewriter ---------- */
   var loader = document.getElementById("loader");
   var timers = [];
@@ -138,8 +164,8 @@
 
         var text = typingLines[lineIdx];
         var charIdx = 0;
-        // ~550ms typing duration per line
-        var charDelay = Math.max(12, Math.round(550 / text.length));
+        // ~1100ms typing duration per line
+        var charDelay = Math.max(12, Math.round(1100 / text.length));
 
         function typeChar() {
           if (loaderFinished) return;
@@ -148,20 +174,20 @@
           if (charIdx < text.length) {
             timers.push(setTimeout(typeChar, charDelay));
           } else {
-            // Line typed completely. Pause 350ms.
+            // Line typed completely. Pause 1100ms.
             if (lineIdx === typingLines.length - 1) {
-              // Final line: pause 350ms then fade out loader
+              // Final line: pause 1100ms then fade out loader
               timers.push(setTimeout(function () {
                 if (loaderFinished) return;
                 loader.classList.add("is-done");
                 timers.push(setTimeout(finishLoader, 300));
-              }, 350));
+              }, 1100));
             } else {
-              // Pause 350ms then erase
+              // Pause 1100ms then erase
               timers.push(setTimeout(function () {
                 if (loaderFinished) return;
                 eraseCurrentLine(text);
-              }, 350));
+              }, 1100));
             }
           }
         }
@@ -171,9 +197,9 @@
       function eraseCurrentLine(text) {
         if (loaderFinished) return;
         var curLen = text.length;
-        // Erase in ~120ms total
+        // Erase in ~250ms total
         var stepDelay = 15;
-        var charsPerStep = Math.max(1, Math.ceil(text.length / (120 / stepDelay)));
+        var charsPerStep = Math.max(1, Math.ceil(text.length / (250 / stepDelay)));
 
         function eraseStep() {
           if (loaderFinished) return;
@@ -183,7 +209,7 @@
             timers.push(setTimeout(eraseStep, stepDelay));
           } else {
             lineIdx++;
-            timers.push(setTimeout(typeCurrentLine, 40));
+            timers.push(setTimeout(typeCurrentLine, 150));
           }
         }
         eraseStep();
