@@ -12,13 +12,21 @@
   var video = document.getElementById("hero-video");
   var skipIntro = document.getElementById("hero-skip");
   var heroTitle = document.getElementById("hero-title");
+  var soundBtn = document.getElementById("hero-sound");
 
   /* ---------- Hero video ---------- */
   function hideSkipIntro() {
     if (!skipIntro || skipIntro.hidden) return;
     var hadFocus = document.activeElement === skipIntro;
     skipIntro.hidden = true;
+    if (soundBtn) soundBtn.hidden = true;
     if (hadFocus && heroTitle) heroTitle.focus();
+  }
+
+  function syncSoundBtn() {
+    if (!soundBtn || !video) return;
+    soundBtn.textContent = video.muted ? "Unmute" : "Mute";
+    soundBtn.setAttribute("aria-pressed", video.muted ? "false" : "true");
   }
 
   function holdFinalFrame() {
@@ -41,7 +49,10 @@
       hideSkipIntro();
       return;
     }
-    video.muted = true;
+    /* Browsers only allow sound after a user gesture (e.g. skipping the loader),
+       so start with sound in that case and otherwise muted behind an Unmute button. */
+    var gesture = !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
+    video.muted = !gesture;
     video.loop = false;
     if (skipIntro) skipIntro.hidden = false;
     var p;
@@ -52,9 +63,23 @@
       hideSkipIntro();
       return;
     }
+    if (soundBtn) { soundBtn.hidden = false; syncSoundBtn(); }
     if (p && typeof p.catch === "function") {
-      /* Autoplay refused or no playable source: the poster stays as the hero. */
       p.catch(function () {
+        if (!video.muted) {
+          /* Sound refused: retry muted before giving up. */
+          video.muted = true;
+          syncSoundBtn();
+          var retry = video.play();
+          if (retry && typeof retry.catch === "function") {
+            retry.catch(function () {
+              try { video.pause(); } catch (err) {}
+              hideSkipIntro();
+            });
+          }
+          return;
+        }
+        /* Autoplay refused or no playable source: the poster stays as the hero. */
         try { video.pause(); } catch (err) {}
         hideSkipIntro();
       });
@@ -69,6 +94,12 @@
     if (sources.length) sources[sources.length - 1].addEventListener("error", hideSkipIntro);
   }
   if (skipIntro) skipIntro.addEventListener("click", holdFinalFrame);
+  if (soundBtn && video) {
+    soundBtn.addEventListener("click", function () {
+      video.muted = !video.muted;
+      syncSoundBtn();
+    });
+  }
 
   /* Hide/show the hero text so the video can be seen unobstructed (desktop only;
      on narrow screens the text sits below the frame). Click the video or the button. */

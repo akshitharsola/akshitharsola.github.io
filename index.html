@@ -18,6 +18,7 @@ intro: true
     <div class="hero-scrim" aria-hidden="true"></div>
     <p class="hero-caption">Illustrative intro, AI-generated</p>
     <button type="button" class="hero-skip" id="hero-skip" hidden>Skip intro</button>
+    <button type="button" class="hero-skip hero-sound" id="hero-sound" aria-pressed="false" hidden>Unmute</button>
     <button type="button" class="hero-skip hero-toggle" id="hero-toggle" aria-controls="hero-text" aria-pressed="false" hidden>Hide text</button>
   </div>
 
@@ -53,33 +54,69 @@ intro: true
 
 <section id="projects" class="projects-section wrap">
   <h2 class="section-heading"><span class="section-kicker" aria-hidden="true">01</span>Projects</h2>
-  <div class="project-grid">
-    {% assign sorted_projects = site.projects | sort: "order" %}
-    {% for p in sorted_projects %}
-    <article class="project-card reveal">
-      {%- if p.headline %}
-      <p class="card-headline{% if p.headline.size > 8 %} is-phrase{% endif %}">{{ p.headline }}</p>
-      {%- if p.headline_label %}<p class="card-headline-label">{{ p.headline_label }}</p>{% endif %}
-      {%- endif %}
-      <div class="card-meta">
-        <span class="eyebrow">{{ p.domain }}</span>
-      </div>
-      <h3 class="card-title">
-        <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
-      </h3>
-      <p class="card-summary">{{ p.summary }}</p>
-      <ul class="stack">
-        {% for t in p.stack %}
-        <li>{% include tech-chip.html name=t %}</li>
-        {% endfor %}
-      </ul>
-    </article>
-    {% endfor %}
+  {%- assign all_projects = site.projects | sort: "order" -%}
+  {%- assign domains = site.project_domains -%}
+  {%- assign known = "" | split: "" -%}
+  <nav class="domain-jump" aria-label="Project areas">
+    {%- for d in domains %}
+    {%- assign grp = all_projects | where: "domain", d %}
+    {%- if grp.size > 0 %}<a href="#domain-{{ d | slugify }}">{{ d }}</a>{% endif %}
+    {%- endfor %}
+  </nav>
+  {%- for d in domains %}
+  {%- assign grp = all_projects | where: "domain", d %}
+  {%- if grp.size > 0 %}
+  {%- assign feat = grp | where: "tier", "featured" %}
+  {%- assign rest = grp | where: "tier", "more" %}
+  <div class="domain-group" id="domain-{{ d | slugify }}">
+    <h3 class="domain-heading">{{ d }}</h3>
+    <div class="project-grid">
+      {%- for p in feat %}{% include project-card.html p=p %}{% endfor %}
+      {%- for p in rest %}{% include project-card.html p=p %}{% endfor %}
+    </div>
   </div>
+  {%- endif %}
+  {%- endfor %}
+  {%- comment -%} Projects whose domain is not in project_domains still show, under Other. {%- endcomment -%}
+  {%- capture other_html -%}
+  {%- for p in all_projects %}
+  {%- unless domains contains p.domain %}{% include project-card.html p=p %}{% endunless %}
+  {%- endfor %}
+  {%- endcapture -%}
+  {%- assign other_trim = other_html | strip -%}
+  {%- if other_trim != "" %}
+  <div class="domain-group" id="domain-other">
+    <h3 class="domain-heading">Other</h3>
+    <div class="project-grid">{{ other_trim }}</div>
+  </div>
+  {%- endif %}
+</section>
+
+<section id="publications" class="pubs wrap" aria-labelledby="pubs-title">
+  <h2 class="section-heading" id="pubs-title"><span class="section-kicker" aria-hidden="true">02</span>Publications</h2>
+  <ul class="pub-list">
+    <li>
+      <p class="pub-title"><a href="https://doi.org/10.2991/978-94-6463-716-8_21" target="_blank" rel="noopener">Applying Machine Learning Techniques to Estimate Post-Mortem Interval From Decomposition Stages</a></p>
+      <p class="pub-venue">RAMSITA 2025 proceedings, Atlantis Press, 2025</p>
+    </li>
+    <li>
+      <p class="pub-title"><a href="https://doi.org/10.61463/ijset.vol.13.issue2.272" target="_blank" rel="noopener">Micro-Expression Recognition for Lie Detection Using Image Processing</a></p>
+      <p class="pub-venue">International Journal of Science, Engineering and Technology, April 2025</p>
+    </li>
+    <li>
+      <p class="pub-title"><a href="https://doi.org/10.5281/zenodo.10702502" target="_blank" rel="noopener">Integrating Blockchain and 5G Technologies for Enhanced Edge Computing</a></p>
+      <p class="pub-venue">International Journal of Recent Advances in Multidisciplinary Topics, February 2024</p>
+    </li>
+    <li>
+      <p class="pub-title"><a href="https://doi.org/10.56726/irjmets48144" target="_blank" rel="noopener">Utilizing AlphaFold Predictions to Understand Protein Function and Dynamics</a></p>
+      <p class="pub-venue">International Research Journal of Modernization in Engineering Technology and Science, January 2024</p>
+    </li>
+  </ul>
+  <p class="pub-note">Two further manuscripts are in preparation.</p>
 </section>
 
 <section id="about" class="about wrap" aria-labelledby="about-title">
-  <h2 class="section-heading" id="about-title"><span class="section-kicker" aria-hidden="true">02</span>About and contact</h2>
+  <h2 class="section-heading" id="about-title"><span class="section-kicker" aria-hidden="true">03</span>About and contact</h2>
   <div class="about-body">
     <img class="portrait" src="{{ '/assets/media/portrait.jpg' | relative_url }}" alt="Akshit Harsola" width="160" height="160" loading="lazy" decoding="async">
     <div class="about-text">
@@ -88,10 +125,13 @@ intro: true
       <div class="core-stack">
         <span class="core-stack-label">Core Stack</span>
         <ul class="stack">
+          <li>{% include tech-chip.html name="Python" %}</li>
           <li>{% include tech-chip.html name="ROS 2 Jazzy" %}</li>
           <li>{% include tech-chip.html name="C++" %}</li>
           <li>{% include tech-chip.html name="PyTorch" %}</li>
           <li>{% include tech-chip.html name="Docker" %}</li>
+          <li>{% include tech-chip.html name="Swift" %}</li>
+          <li>{% include tech-chip.html name="Kotlin" %}</li>
         </ul>
       </div>
       <div class="btn-row">

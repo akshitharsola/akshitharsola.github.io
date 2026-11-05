@@ -1,0 +1,28 @@
+<figure class="diagram">
+<svg viewBox="0 0 880 270" role="img" aria-labelledby="lp-t lp-d">
+<title id="lp-t">SmolVLA control pipeline</title>
+<desc id="lp-d">Overhead and wrist cameras feed a SmolVLA policy server on a GPU. Action chunks travel over a local ZeroMQ socket to a robot client that buffers and blends them before driving the SO-101 arm.</desc>
+<defs><marker id="lp-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="dg-head" d="M0 0 L10 5 L0 10 z"/></marker><marker id="lp-g" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="dg-head is-gold" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<text class="dg-tag" x="20" y="22">VISION INPUT</text>
+<rect class="dg-box" x="20" y="40" width="165" height="70" rx="10"/>
+<text class="dg-title" x="38" y="70">Overhead camera</text><text class="dg-sub" x="38" y="92">USB, scene view</text>
+<rect class="dg-box" x="20" y="150" width="165" height="70" rx="10"/>
+<text class="dg-title" x="38" y="180">Wrist camera</text><text class="dg-sub" x="38" y="202">USB, close-up view</text>
+<path class="dg-line" d="M185 75 C212 75 212 110 240 110" marker-end="url(#lp-a)"/>
+<path class="dg-line" d="M185 185 C212 185 212 150 240 150" marker-end="url(#lp-a)"/>
+<text class="dg-tag" x="240" y="22">GPU</text>
+<rect class="dg-box is-purple" x="240" y="75" width="205" height="110" rx="10"/>
+<text class="dg-title" x="258" y="112">SmolVLA policy server</text><text class="dg-sub" x="258" y="136">450M parameter</text><text class="dg-sub" x="258" y="154">vision-language-action</text><text class="dg-sub" x="258" y="172">model</text>
+<path class="dg-line is-gold" d="M445 130 H550" marker-end="url(#lp-g)"/>
+<text class="dg-sub" x="497" y="116" text-anchor="middle">action chunks</text>
+<text class="dg-tag" x="550" y="22">ROBOT CLIENT</text>
+<rect class="dg-box is-pink" x="550" y="75" width="200" height="110" rx="10"/>
+<text class="dg-title" x="568" y="112">Local ZeroMQ socket</text><text class="dg-sub" x="568" y="136">Queues and blends chunks.</text><text class="dg-sub" x="568" y="154">Inference never blocks</text><text class="dg-sub" x="568" y="172">the control loop.</text>
+<path class="dg-line" d="M750 130 H782" marker-end="url(#lp-a)"/>
+<text class="dg-tag" x="782" y="22">ARM</text>
+<rect class="dg-box is-gold" x="782" y="75" width="88" height="110" rx="10"/>
+<text class="dg-title" x="826" y="125" text-anchor="middle">SO-101</text><text class="dg-sub" x="826" y="147" text-anchor="middle">6-DoF arm</text>
+<text class="dg-sub" x="20" y="254">Asynchronous design: the server and the client run separately, so the arm keeps moving while the next chunk is computed.</text>
+</svg>
+<figcaption>Figure 1. Control pipeline for the final strawberry task.</figcaption>
+</figure>

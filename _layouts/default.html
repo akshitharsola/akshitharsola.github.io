@@ -3,11 +3,22 @@
 <head>
   <meta charset="utf-8">
   <meta name="viewport" content="width=device-width, initial-scale=1">
-  <title>{% if page.title %}{{ page.title }} · {% endif %}{{ site.title }}</title>
-  <meta name="description" content="{{ page.summary | default: site.description }}">
+  {%- assign page_desc = page.summary | default: page.blurb | default: site.description %}
+  {%- assign page_title = site.title | append: " · ML, Robotics and Computer Vision" %}
+  {%- if page.title %}{% assign page_title = page.title | append: " · " | append: site.title %}{% endif %}
+  <title>{{ page_title }}</title>
+  <meta name="description" content="{{ page_desc }}">
+  <link rel="canonical" href="{{ page.url | absolute_url }}">
+  <meta property="og:type" content="website">
+  <meta property="og:title" content="{{ page_title }}">
+  <meta property="og:description" content="{{ page_desc }}">
+  <meta property="og:url" content="{{ page.url | absolute_url }}">
+  <meta property="og:image" content="{{ '/assets/media/hero-poster.jpg' | absolute_url }}">
+  <meta name="twitter:card" content="summary_large_image">
+  <link rel="icon" type="image/png" href="{{ '/assets/media/favicon.png' | relative_url }}">
+  <meta name="theme-color" content="#130f1f">
   <link rel="stylesheet" href="{{ '/assets/css/main.css' | relative_url }}">
   {%- if page.intro %}
-  <meta name="theme-color" content="#0b0d10">
   <script>
     /* Decide before first paint whether the intro loader runs, so it never flashes in late. */
     (function () {
@@ -22,15 +33,18 @@
 </head>
 <body{% if page.body_class %} class="{{ page.body_class }}"{% endif %}>
   {%- if page.intro %}{% include intro-loader.html %}{% endif %}
+  <a class="skip-link" href="#main">Skip to content</a>
   <header class="site-header">
-    <a class="brand" href="{{ '/' | relative_url }}">{{ site.author.name }}</a>
-    <nav>
-      <a href="{{ '/#projects' | relative_url }}">Projects</a>
-      <a href="https://github.com/{{ site.author.github }}">GitHub</a>
-      <a href="{{ site.author.linkedin }}">LinkedIn</a>
+    <a class="brand" href="{{ '/' | relative_url }}" aria-label="{{ site.author.name }}, home">
+      <img class="brand-logo" src="{{ '/assets/media/logo-gold.png' | relative_url }}" alt="" width="94" height="60">
+    </a>
+    <nav aria-label="Primary">
+      <a class="nav-link" href="{{ '/#projects' | relative_url }}"><svg class="nav-icon" viewBox="0 0 24 24" aria-hidden="true" focusable="false"><g fill="none" stroke="var(--link)" stroke-width="1.8" stroke-linecap="round"><path d="M8.6 7.5l6.8 4M15.4 12.5l-6.8 4"/></g><g fill="var(--accent)" stroke="var(--accent)" stroke-width="1.8"><circle cx="6" cy="6" r="3"/><circle cx="18" cy="6" r="3"/><circle cx="12" cy="18" r="3"/></g></svg><span class="nav-label">Projects</span></a>
+      <a class="nav-link" href="https://github.com/{{ site.author.github }}" target="_blank" rel="noopener"><i class="nav-icon" style="--logo:url('{{ '/assets/icons/github.svg' | relative_url }}')" aria-hidden="true"></i><span class="nav-label">GitHub</span></a>
+      <a class="nav-link" href="{{ site.author.linkedin }}" target="_blank" rel="noopener"><i class="nav-icon" style="--logo:url('{{ '/assets/icons/linkedin.svg' | relative_url }}')" aria-hidden="true"></i><span class="nav-label">LinkedIn</span></a>
     </nav>
   </header>
-  <main>{{ content }}</main>
+  <main id="main">{{ content }}</main>
   <footer class="site-footer">© {{ site.time | date: "%Y" }} {{ site.author.name }}</footer>
   {% include mermaid.html %}
 </body>

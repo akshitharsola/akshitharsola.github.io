@@ -1,11 +1,19 @@
 ---
 title: Classical Parking Occupancy Detection
-domain: Computer Vision
+domain: Robotics and Computer Vision
 order: 2
+tier: featured
 summary: "Classical OpenCV pipeline detecting 95.1% of parking spots and classifying occupancy (74.2% F1) at ~120 ms per image, with no training data."
 stack: [Python, OpenCV]
 headline: "95.1%"
 headline_label: "parking spots detected (328 of 345)"
+abstract:
+  - label: Problem
+    text: "Detect parking spots and classify each as occupied or empty from aerial drone images, with no training data."
+  - label: Approach
+    text: "A classical OpenCV pipeline. Image difficulty picks the method: template matching, Hough lines with DBSCAN, or rotated rectangles."
+  - label: Result
+    text: "95.1% of spots detected (328 of 345), 74.2% occupancy F1, about 120 ms per image on an Apple M2 with no GPU. Medium and hard layouts need manual zones."
 ---
 EE551 Embedded Image Processing course project, University of Galway.
 [Code and report](https://github.com/akshitharsola/Classical-Parking-Spot-Detection-and-Occupancy-Classification-Using-Image-Processing)
@@ -20,38 +28,13 @@ Image difficulty sets the method. The three tiers are:
 - **Medium (partly occluded zones):** a manually defined zone, Gaussian blur, Canny edges, probabilistic Hough lines, then DBSCAN to group collinear lines into spot corners.
 - **Hard (angled spots, 0° to 45°):** manual zones per image, relaxed Hough parameters, rotated rectangles (`cv2.minAreaRect`), and a five-feature occupancy score with thresholds learned per zone from the first 2-3 detections.
 
-```mermaid
-flowchart LR
-    input["Aerial Drone Image"] --> branch{"Difficulty Tier"}
+{% include diagrams/edge-tiers.html %}
 
-    subgraph TierEasy ["Easy (~45 ms/image)"]
-        tm["Template Matching & NCC"] --> grid["Grid Spot Placement"]
-        grid --> occ_easy["Occupancy Scoring (Edge Density & Variance)"]
-    end
-
-    subgraph TierMed ["Medium (~120 ms/image)"]
-        zone_med["Manual Zone Definition"] --> blur["Gaussian Blur & Canny Edges"]
-        blur --> hough_med["Probabilistic Hough Lines"]
-        hough_med --> dbscan["DBSCAN Collinear Grouping"]
-        dbscan --> occ_med["Occupancy Scoring"]
-    end
-
-    subgraph TierHard ["Hard (~200 ms/image)"]
-        zone_hard["Manual Zones per Image"] --> hough_hard["Relaxed Hough Parameters"]
-        hough_hard --> rot_rect["Rotated Rectangles (minAreaRect)"]
-        rot_rect --> occ_hard["5-Feature Occupancy Scoring"]
-    end
-
-    branch -->|Regular Grids| tm
-    branch -->|Partly Occluded| zone_med
-    branch -->|Angled 0° to 45°| zone_hard
-
-    occ_easy --> out["Per-Spot Occupancy Status"]
-    occ_med --> out
-    occ_hard --> out
-```
 
 ## Evaluation & Constraints
+
+{% include diagrams/edge-results.html %}
+
 10 aerial test images (4 easy, 3 medium, 3 hard), 345 ground-truth spots. Measured on an Apple M2 with no GPU.
 
 - **Spot detection:** 95.1% overall (328 of 345). Easy 78/78, medium 95/95, hard 155/172 (90.1%).

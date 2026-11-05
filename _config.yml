@@ -11,6 +11,12 @@ author:
 markdown: kramdown
 highlighter: rouge
 
+project_domains:
+  - Robotics and Computer Vision
+  - AI Systems
+  - Mobile, Desktop and Developer Tools
+  - Data and Analytics
+
 collections:
   projects:
     output: true

@@ -1,10 +1,32 @@
-{%- comment -%} Usage: {% include tech-chip.html name="Python" %}. Logos are Simple Icons, drawn as a CSS mask so they follow the text colour in light and dark mode. {%- endcomment -%}
+{%- comment -%} Usage: {% include tech-chip.html name="Python" %}. Icons are Simple Icons (vendored in assets/icons), drawn as a CSS mask and filled with the tool's brand colour. Python gets its two tone blue and yellow. {%- endcomment -%}
 {%- assign n = include.name | downcase -%}
+{%- assign fill = "" -%}
 {%- case n -%}
-  {%- when "c++" -%}{%- assign slug = "cplusplus" -%}
-  {%- when "power bi" -%}{%- assign slug = "powerbi" -%}
-  {%- when "ros 2 jazzy", "ros 2" -%}{%- assign slug = "ros" -%}
-  {%- when "python", "opencv", "pytorch", "docker", "swift", "kotlin", "latex" -%}{%- assign slug = n -%}
+  {%- when "python" -%}{%- assign slug = "python" -%}{%- assign fill = "linear-gradient(135deg,#5b9bd5 0 50%,#ffd43b 50% 100%)" -%}
+  {%- when "pytorch" -%}{%- assign slug = "pytorch" -%}{%- assign fill = "#ee4c2c" -%}
+  {%- when "c++" -%}{%- assign slug = "cplusplus" -%}{%- assign fill = "#659ad2" -%}
+  {%- when "docker", "docker compose" -%}{%- assign slug = "docker" -%}{%- assign fill = "#2496ed" -%}
+  {%- when "opencv" -%}{%- assign slug = "opencv" -%}{%- assign fill = "#8a73ff" -%}
+  {%- when "power bi", "power query", "dax" -%}{%- assign slug = "powerbi" -%}{%- assign fill = "#f2c811" -%}
+  {%- when "swift" -%}{%- assign slug = "swift" -%}{%- assign fill = "#f05138" -%}
+  {%- when "kotlin" -%}{%- assign slug = "kotlin" -%}{%- assign fill = "#a97bff" -%}
+  {%- when "latex" -%}{%- assign slug = "latex" -%}{%- assign fill = "#3fa9a5" -%}
+  {%- when "ros 2 jazzy", "ros 2" -%}{%- assign slug = "ros" -%}{%- assign fill = "#dce3f5" -%}
+  {%- when "fastapi" -%}{%- assign slug = "fastapi" -%}{%- assign fill = "#1fb5a6" -%}
+  {%- when "react" -%}{%- assign slug = "react" -%}{%- assign fill = "#61dafb" -%}
+  {%- when "postgresql" -%}{%- assign slug = "postgresql" -%}{%- assign fill = "#6f93d6" -%}
+  {%- when "seleniumbase" -%}{%- assign slug = "selenium" -%}{%- assign fill = "#5cc243" -%}
+  {%- when "jetpack compose" -%}{%- assign slug = "jetpackcompose" -%}{%- assign fill = "#4f9bff" -%}
+  {%- when "ktor" -%}{%- assign slug = "ktor" -%}{%- assign fill = "#c36bff" -%}
+  {%- when "typescript" -%}{%- assign slug = "typescript" -%}{%- assign fill = "#5a9be0" -%}
+  {%- when "android keystore" -%}{%- assign slug = "android" -%}{%- assign fill = "#3ddc84" -%}
+  {%- when "room" -%}{%- assign slug = "sqlite" -%}{%- assign fill = "#4aa3df" -%}
+  {%- when "ble" -%}{%- assign slug = "bluetooth" -%}{%- assign fill = "#5aa9ff" -%}
+  {%- when "appkit" -%}{%- assign slug = "apple" -%}{%- assign fill = "#dce3f5" -%}
+  {%- when "pyqt5" -%}{%- assign slug = "qt" -%}{%- assign fill = "#41cd52" -%}
+  {%- when "aes-256-gcm" -%}{%- assign slug = "lock" -%}{%- assign fill = "#cfa9f2" -%}
+  {%- when "accessibility api" -%}{%- assign slug = "accessibility" -%}{%- assign fill = "#cfa9f2" -%}
+  {%- when "alembic" -%}{%- assign slug = "database" -%}{%- assign fill = "#cfa9f2" -%}
   {%- else -%}{%- assign slug = "" -%}
 {%- endcase -%}
-<span class="chip">{% if slug != "" %}<i class="chip-logo" style="--logo:url('https://cdn.jsdelivr.net/npm/simple-icons@11.14.0/icons/{{ slug }}.svg')" aria-hidden="true"></i>{% endif %}{{ include.name }}</span>
+<span class="chip">{% if slug != "" %}<i class="chip-logo" style="--logo:url('{{ '/assets/icons/' | append: slug | append: '.svg' | relative_url }}');--fill:{{ fill }}" aria-hidden="true"></i>{% endif %}<span class="chip-name">{{ include.name }}</span></span>

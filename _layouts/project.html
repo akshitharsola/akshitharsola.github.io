@@ -2,9 +2,35 @@
 layout: default
 ---
 <article class="project">
-  <p class="eyebrow">{{ page.domain }}</p>
-  <h1>{{ page.title }}</h1>
-  <p class="lede">{{ page.summary }}</p>
-  <ul class="stack">{% for t in page.stack %}<li>{% include tech-chip.html name=t %}</li>{% endfor %}</ul>
+  <header class="project-head">
+    <p class="eyebrow">{{ page.domain }}</p>
+    <h1>{{ page.title }}</h1>
+    <p class="lede">{{ page.summary }}</p>
+    <div class="project-facts">
+      {%- if page.headline %}
+      <div class="fact">
+        <p class="fact-num{% if page.headline.size > 8 %} is-phrase{% endif %}">{{ page.headline }}</p>
+        {%- if page.headline_label %}<p class="fact-label">{{ page.headline_label }}</p>{% endif %}
+      </div>
+      {%- endif %}
+      <div class="fact fact-stack">
+        <p class="fact-label">Built with</p>
+        <ul class="stack stack-lg">{% for t in page.stack %}<li>{% include tech-chip.html name=t %}</li>{% endfor %}</ul>
+      </div>
+    </div>
+  </header>
+  {%- if page.abstract %}
+  <section class="abstract" aria-labelledby="abstract-title">
+    <h2 class="abstract-title" id="abstract-title">At a glance</h2>
+    <dl class="abstract-list">
+      {%- for a in page.abstract %}
+      <div class="abstract-row"><dt>{{ a.label }}</dt><dd>{{ a.text }}</dd></div>
+      {%- endfor %}
+    </dl>
+  </section>
+  {%- endif %}
+  <div class="prose">
   {{ content }}
+  </div>
+  <p class="project-back"><a href="{{ '/#projects' | relative_url }}">&larr; All projects</a></p>
 </article>

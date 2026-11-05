@@ -1,0 +1,24 @@
+<figure class="diagram">
+<svg viewBox="0 0 880 350" role="img" aria-labelledby="et-t et-d">
+<title id="et-t">Parking detection pipeline by difficulty tier</title>
+<desc id="et-d">An aerial drone image is routed by difficulty to one of three classical pipelines, easy, medium and hard, each ending in per-spot occupancy status.</desc>
+<defs><marker id="et-a" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse"><path class="dg-head" d="M0 0 L10 5 L0 10 z"/></marker></defs>
+<rect class="dg-box" x="20" y="130" width="130" height="90" rx="10"/><text class="dg-title" x="85" y="170" text-anchor="middle">Aerial drone</text><text class="dg-title" x="85" y="190" text-anchor="middle">image</text>
+<path class="dg-line" d="M150 175 H190" marker-end="url(#et-a)"/>
+<rect class="dg-box is-purple" x="190" y="130" width="120" height="90" rx="10"/><text class="dg-title" x="250" y="170" text-anchor="middle">Difficulty</text><text class="dg-title" x="250" y="190" text-anchor="middle">tier</text>
+<path class="dg-line" d="M310 160 C340 160 330 63 360 63" marker-end="url(#et-a)"/>
+<path class="dg-line" d="M310 175 H360" marker-end="url(#et-a)"/>
+<path class="dg-line" d="M310 190 C340 190 330 287 360 287" marker-end="url(#et-a)"/>
+<rect class="dg-box" x="360" y="14" width="360" height="98" rx="10"/><text class="dg-tag" x="378" y="38">EASY · REGULAR GRIDS</text><text class="dg-gold" x="700" y="38" text-anchor="end">~45 ms</text>
+<text class="dg-sub" x="378" y="62">Template matching with normalised cross-correlation,</text><text class="dg-sub" x="378" y="80">grid spot placement, then edge density and</text><text class="dg-sub" x="378" y="98">variance for occupancy.</text>
+<rect class="dg-box is-purple" x="360" y="126" width="360" height="98" rx="10"/><text class="dg-tag" x="378" y="150">MEDIUM · PARTLY OCCLUDED</text><text class="dg-gold" x="700" y="150" text-anchor="end">~120 ms</text>
+<text class="dg-sub" x="378" y="174">Manual zone, Gaussian blur, Canny edges, Hough</text><text class="dg-sub" x="378" y="192">lines, DBSCAN grouping of collinear lines into</text><text class="dg-sub" x="378" y="210">spot corners, occupancy score.</text>
+<rect class="dg-box is-pink" x="360" y="238" width="360" height="98" rx="10"/><text class="dg-tag" x="378" y="262">HARD · ANGLED 0° TO 45°</text><text class="dg-gold" x="700" y="262" text-anchor="end">~200 ms</text>
+<text class="dg-sub" x="378" y="286">Manual zones per image, relaxed Hough parameters,</text><text class="dg-sub" x="378" y="304">rotated rectangles (minAreaRect), five-feature</text><text class="dg-sub" x="378" y="322">occupancy score.</text>
+<path class="dg-line" d="M720 63 C750 63 740 175 770 175" marker-end="url(#et-a)"/>
+<path class="dg-line" d="M720 175 H770" marker-end="url(#et-a)"/>
+<path class="dg-line" d="M720 287 C750 287 740 175 770 175" marker-end="url(#et-a)"/>
+<rect class="dg-box is-gold" x="770" y="130" width="94" height="90" rx="10"/><text class="dg-title" x="817" y="170" text-anchor="middle">Per spot</text><text class="dg-title" x="817" y="190" text-anchor="middle">status</text>
+</svg>
+<figcaption>Figure 1. Image difficulty sets the method. Latency measured on an Apple M2, no GPU.</figcaption>
+</figure>

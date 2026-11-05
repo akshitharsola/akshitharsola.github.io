@@ -1,0 +1,21 @@
+{%- comment -%} Usage: {% include project-card.html p=project %}. Every project card links to its detail page. {%- endcomment -%}
+{%- assign p = include.p -%}
+
+<article class="project-card reveal">
+  {%- if p.headline %}
+  <p class="card-headline{% if p.headline.size > 8 %} is-phrase{% endif %}">{{ p.headline }}</p>
+  {%- if p.headline_label %}<p class="card-headline-label">{{ p.headline_label }}</p>{% endif %}
+  {%- endif %}
+  <div class="card-meta">
+    <span class="eyebrow">{{ p.domain }}</span>
+  </div>
+  <h3 class="card-title">
+    <a href="{{ p.url | relative_url }}">{{ p.title }}</a>
+  </h3>
+  <p class="card-summary">{{ p.summary }}</p>
+  <ul class="stack">
+    {% for t in p.stack %}
+    <li>{% include tech-chip.html name=t %}</li>
+    {% endfor %}
+  </ul>
+</article>
