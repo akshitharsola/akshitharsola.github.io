@@ -49,10 +49,10 @@
       hideSkipIntro();
       return;
     }
-    /* Browsers only allow sound after a user gesture (e.g. skipping the loader),
-       so start with sound in that case and otherwise muted behind an Unmute button. */
-    var gesture = !!(navigator.userActivation && navigator.userActivation.hasBeenActive);
-    video.muted = !gesture;
+    /* Always try with sound first. Browsers allow it after a gesture, or on sites where
+       the visitor has often played media with sound; otherwise play() is refused below
+       and the video restarts muted behind the Unmute button. */
+    video.muted = false;
     video.loop = false;
     if (skipIntro) skipIntro.hidden = false;
     var p;
