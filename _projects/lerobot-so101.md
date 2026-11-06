@@ -42,7 +42,7 @@ Two cameras (overhead and wrist) feed a SmolVLA policy server on a GPU. It retur
 - **Diffusion sampling:** 100-step DDPM held control to 0.9 Hz. Switching to 5-step DDIM raised it to 13.5 Hz and grasp success from 10% to 70%.
 - **Real fruit abandoned:** real strawberries were crushed or torn by the gripper, so the final task uses a printed strawberry prop with a grasp rule (stem or mid-body, never the bottom tip).
 - **Training on a Jetson AGX Orin:** about 8 GB of free storage, so a background pruner bounded disk use while checkpoints streamed to Hugging Face Hub.
-- **Data:** 84 episodes (59,865 frames) in the final combined dataset. Models and datasets are on Hugging Face under `Akshit03`.
+- **Data:** 84 episodes (59,865 frames) in the final combined dataset. Models and datasets are on Hugging Face under [Akshit03](https://huggingface.co/Akshit03).
 
 ## What I'd do next
 - Run 50-100+ trials for a benchmark-grade success rate.
