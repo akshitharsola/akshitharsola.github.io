@@ -31,7 +31,7 @@ Image difficulty sets the method. The three tiers are:
 {% include diagrams/edge-tiers.html %}
 
 
-## Evaluation & Constraints
+## Evaluation and constraints
 
 {% include diagrams/edge-results.html %}
 
@@ -42,7 +42,7 @@ Image difficulty sets the method. The three tiers are:
 - **Latency:** about 45 / 120 / 200 ms per image for easy / medium / hard, averaging about 120 ms (9 fps).
 - **Memory:** 50-80 MB per image.
 
-### **Constraints & Trade-offs Ledger**
+### Constraints and trade-offs
 
 | Difficulty Tier | Test Images | Spot Detection Rate | Occupancy (F1) | Latency per Image |
 | :--- | :--- | :--- | :--- | :--- |
@@ -55,7 +55,7 @@ Memory: 50-80 MB per image (the report gives one range, not a per-tier figure).
 
 **Trade-offs:** the classical approach needs no labelled training data and its decisions can be inspected. The price is lower occupancy accuracy on medium images (52.7% F1) and manually defined zones on medium and hard layouts. The report also sketches a hypothetical YOLOv8 comparison (not a measurement): it would need 10,000+ labelled images and a GPU.
 
-## Honest Limitations
+## Limits
 - **Manual zones:** medium and hard images need the parking zones defined by hand (7 zones for the largest image).
 - **Medium images:** occupancy F1 was only 52.7%. The report names shadows creating false line detections, decorative markings such as trees and bollards, and DBSCAN occasionally merging neighbouring spots.
 - **Hard images:** on one image only 8 of 25 spots were detected (32%), though occupancy on those 8 was correct.

@@ -1,4 +1,16 @@
-/* Technical dossier styling: minimal, robust, dark-mode native, mobile-first. */
+/* Technical dossier styling: minimal, dark-mode native, mobile-first. */
+@font-face {
+  font-family: "Geist";
+  src: url("../fonts/geist-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
+@font-face {
+  font-family: "Geist Mono";
+  src: url("../fonts/geist-mono-latin-wght-normal.woff2") format("woff2");
+  font-weight: 100 900;
+  font-display: swap;
+}
 :root {
   /* Palette from the GitHub profile banner (ink violet, purple, pink) and the name logo (gold). */
   --fg: #efeaf7;
@@ -17,14 +29,14 @@
   --badge-bg: #1f1833;
   --badge-border: #4a3a73;
   --scrim: 19, 15, 31;
-  --mono: ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
+  --mono: "Geist Mono", ui-monospace, SFMono-Regular, Menlo, Consolas, "Liberation Mono", monospace;
   --wrap: 1120px;
   color-scheme: dark;
 }
 * { box-sizing: border-box; }
 body {
   margin: 0;
-  font: 16px/1.6 system-ui, -apple-system, "Segoe UI", sans-serif;
+  font: 16px/1.6 "Geist", system-ui, -apple-system, "Segoe UI", sans-serif;
   color: var(--fg);
   background: var(--bg);
   overflow-x: hidden;
@@ -766,7 +778,7 @@ img {
   position: relative;
   padding: 24px;
   border-radius: 10px;
-  background: linear-gradient(180deg, var(--card-top) 0%, var(--card-bg) 100%);
+  background: var(--card-bg);
   gap: 12px;
 }
 .home .project-card:hover,
@@ -845,31 +857,6 @@ img {
     align-items: center;
     gap: 32px;
   }
-}
-
-/* ---------- Engineering practice (small, near the footer) ---------- */
-.practice {
-  margin-top: 56px;
-  padding-top: 24px;
-  border-top: 1px solid var(--line);
-  font-size: .9rem;
-  color: var(--muted);
-}
-.practice .section-heading {
-  font-size: 1.1rem;
-  color: var(--fg);
-  margin-bottom: 10px;
-}
-.practice code {
-  font-family: var(--mono);
-  font-size: .85em;
-  color: var(--fg);
-}
-.practice pre {
-  font-size: .75rem;
-  line-height: 1.5;
-  max-height: 320px;
-  overflow: auto;
 }
 
 /* ---------- Scroll reveal (only once intro.js adds .reveal-ready) ---------- */
