@@ -172,7 +172,7 @@
     var typingLines = [
       "Machine Learning · Robotics · Computer Vision",
       "Robot Learning | ROS 2 | LeRobot",
-      "3x Published Researcher",
+      "4x Published Researcher",
       "Seeking graduate roles in Ireland and the EU"
     ];
 
